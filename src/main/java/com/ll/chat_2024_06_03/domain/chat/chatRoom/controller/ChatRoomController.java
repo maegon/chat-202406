@@ -2,10 +2,9 @@ package com.ll.chat_2024_06_03.domain.chat.chatRoom.controller;
 
 import com.ll.chat_2024_06_03.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.chat_2024_06_03.domain.chat.chatRoom.service.ChatRoomService;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/chat/room")
 @RequiredArgsConstructor
-public class chatRoomController {
+public class ChatRoomController {
     private final ChatRoomService chatRoomService;
     @GetMapping("{roomId}")
     @ResponseBody
@@ -35,12 +34,14 @@ public class chatRoomController {
             @RequestParam(value = "name") final String name
     ) {
         chatRoomService.make(name);
-        return "redirect:/chat/room/make?message=Chat Room Created";
+        return "redirect:/chat/room/list";
     }
 
     @GetMapping("/list")
-    @ResponseBody
-    public List<ChatRoom> showList() {
-        return chatRoomService.findAll();
+    public String  showList(Model model) {
+        List<ChatRoom> chatRooms = chatRoomService.findAll();
+        model.addAttribute("chatRooms", chatRooms);
+
+        return "domain/chat/chatRoom/list";
     }
 }
