@@ -1,6 +1,7 @@
 package com.ll.chat_2024_06_03.domain.chat.chatRoom.controller;
 
-import com.ll.chat_2024_06_03.domain.chat.chatRoom.entity.ChatMessage;
+import com.ll.chat_2024_06_03.domain.chat.chatMessage.entity.ChatMessage;
+import com.ll.chat_2024_06_03.domain.chat.chatMessage.service.ChatMessageService;
 import com.ll.chat_2024_06_03.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.chat_2024_06_03.domain.chat.chatRoom.service.ChatRoomService;
 import com.ll.chat_2024_06_03.global.rsData.RsData;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
+    private final ChatMessageService chatMessageService;
 
     @GetMapping("/{roomId}")
     public String showRoom(
@@ -80,15 +82,16 @@ public class ChatRoomController {
     @Getter
     @AllArgsConstructor
     public static class GetMessagesAfterResponseBody {
-
+        private List<ChatMessage> messages;
     }
 
-    @PostMapping("/{roomId}/messagesAfter/{formChatMessageId}")
+    @PostMapping("/{roomId}/messagesAfter/{afterId}")
     @ResponseBody
     public RsData<GetMessagesAfterResponseBody> getMessagesAfter(
             @PathVariable("roomId") final long roomId,
-            @PathVariable("formChatMessageId") final long formChatMessageId
+            @PathVariable("afterId") final long afterId
     ) {
-        return null;
+        List<ChatMessage> messages = chatMessageService.findByChatRoomAndIdAfter;
+        return RsData.of("S-1", "%d개의 메시지를 가져왔습니다.".formatted(messages.size()), new GetMessagesAfterResponseBody(messages));
     }
 }
