@@ -1,6 +1,5 @@
-package com.ll.chat_2024_06_03.domain.chat.chatRoom.entity;
+package com.ll.chat_2024_06_03.global.jpa.baseEntity;
 
-import com.ll.chat_2024_06_03.global.jpa.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -13,22 +12,23 @@ import java.time.LocalDateTime;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-@SuperBuilder // BaseEntity에서 상속 받으면 이 어노테이션을 달아줘야함
+@MappedSuperclass
+@SuperBuilder
 @Getter
-@Setter
-@ToString(callSuper = true)
-public class ChatMessage extends BaseEntity {
+@ToString
+@EqualsAndHashCode
+public class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @EqualsAndHashCode.Include
+    private Long id;
 
-    @ManyToOne
-    private ChatRoom chatRoom;
+    @CreatedDate
+    private LocalDateTime createDate;
 
-    @Getter
-    private String writerName;
-
-    @Getter
-    private String content;
-
+    @LastModifiedDate
+    private LocalDateTime ModifyDate;
 }
