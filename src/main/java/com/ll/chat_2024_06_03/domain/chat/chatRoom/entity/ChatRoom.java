@@ -4,16 +4,10 @@ import com.ll.chat_2024_06_03.global.jpa.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -38,7 +32,7 @@ public class ChatRoom extends BaseEntity {
         this.name = name;
     }
 
-    public void writeMessage(String writerName, String content) {
+    public ChatMessage writeMessage(String writerName, String content) {
         ChatMessage chatMessage = ChatMessage
                 .builder()
                 .chatRoom(this)
@@ -46,5 +40,6 @@ public class ChatRoom extends BaseEntity {
                 .content(content)
                 .build();
         chatMessages.add(chatMessage);
+        return chatMessage;
     }
 }

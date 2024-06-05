@@ -6,7 +6,7 @@
 </div>
 
 <!-- 프론트에서 유효성 체크 하는 방법: onclick, onsubmit 활용 => return false; 후 다른 폼으로 이동시킴 -->
-<form onsubmit="submitWriterForm(this); return false;" th:action="@{|/chat/room/${roomId}/write|}" method="POST">
+<form onsubmit="submitWriterForm(this); return false;" method="POST">
   <input type="text" name="writerName" placeholder="작성자명">
   <input type="text" name="content" placeholder="내용">
   <input type="submit" value="작성">
@@ -22,6 +22,10 @@
     </li>
   </ul>
 </div>
+
+<script th:inline="javascript">
+  const roomId = /*[[${roomId}]]*/ 0;
+</script>
 
 <script>
   function submitWriteForm(this) {
@@ -41,6 +45,21 @@
         return;
       }
       
-      form.submit();
+      const action = `/chat/room/${roomId}/write`;
+      
+      fetch(
+        action,
+        {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            writerName: form.writerName.value,
+            content: form.content.value,
+          }),
+        }
+      );
   }
 </script>
